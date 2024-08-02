@@ -13,8 +13,16 @@ const movieSlice = createSlice({
         items: initialMovies
     },
     reducers: {
-        add: (state, action) => state.items.push(action.payload),
-        edit: (state, action) => state.items.map((movie, index) => index === action.payload.id ? movie = action.payload.data : movie )
+        add: (state, action) => {
+            state.items.push(action.payload)      
+            console.log(state.items);
+                  
+        },
+        edit: (state, action) => {
+            const {id, data} = action.payload;
+            state.items[id] = data;
+
+        }
     }
 })
 

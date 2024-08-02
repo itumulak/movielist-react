@@ -11,8 +11,8 @@ const StyledInput = styled.input`
     }
 `
 
-export default ({type = 'text', placeholder = '', value = ''}) => {
+export default ({type = 'text', placeholder = '', value = '', onChange}) => {
     return (
-        <StyledInput required className="font-montserrat rounded px-4" type={type} placeholder={placeholder} defaultValue={value}/>
+        <StyledInput onChange={onChange} required className="font-montserrat rounded px-4" type={type} placeholder={placeholder} defaultValue={value}/>
     );
 }

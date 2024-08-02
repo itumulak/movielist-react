@@ -1,6 +1,8 @@
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { add, edit } from "../store/movieSlice";
 import { styled } from "styled-components";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import Button from "./Button";
@@ -46,7 +48,10 @@ const getBase64 = async (file) => {
     })
 }
 
-export default ({title = '', year = '', poster = '', ...props}) => {
+export default ({id = '', title = '', year = '', poster = '', ...props}) => {
+    const dispatch = useDispatch();
+    const [fieldTitle, setTitle] = useState(title);
+    const [fieldYear, setYear] = useState(year);
     const [file, setFile] = useState(poster);
     const onDrop = useCallback((acceptedFiles) => {
         const image = getBase64(acceptedFiles[0]);
@@ -54,14 +59,37 @@ export default ({title = '', year = '', poster = '', ...props}) => {
     }, []);
     const {getRootProps, getInputProps} = useDropzone({maxFiles: 1, onDrop});
     const navigate = useNavigate();
-    const navigateBack = () => {
-        navigate('/');
+    const navigateBack = () => navigate('/');
+
+    const handleOnChangeTitle = (event) => {
+        event.preventDefault();
+        const title = event.target.value;
+        setTitle(title);
+    }
+    
+    const handleOnChangeYear = (event) => {
+        event.preventDefault();
+        const year = event.target.value;
+        setYear(year);
+    }
+
+    const handleOnSubmit = (event) => {
+        event.preventDefault();
+        
+        if ( id ) {            
+            dispatch(edit({id, data: {title: fieldTitle, year: fieldYear, poster: file}}));
+            navigateBack();
+        }
+        else {
+            dispatch(add({title: fieldTitle, year: fieldYear, poster: file}));
+            navigateBack();
+        }
     }
 
     return (
-        <Form {...props}>
-            <Input placeholder="Title" value={title} />
-            <Input placeholder="Publishing year" value={year}/>
+        <Form onSubmit={handleOnSubmit} {...props}>
+            <Input onChange={handleOnChangeTitle} placeholder="Title" value={title} />
+            <Input type="number" onChange={handleOnChangeYear} placeholder="Publishing year" value={year}/>
             <DropZone {...getRootProps()}>
                 <input {...getInputProps()} />
                 {!file && <div><p><FileDownloadIcon/></p><p>Upload an image</p></div> }

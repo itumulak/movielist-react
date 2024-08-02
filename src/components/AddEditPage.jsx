@@ -8,21 +8,17 @@ import Wave from "./Wave";
 export default () => {
     let data;
     const { id } = useParams();
+    let movies = useSelector(state => state.movies.items);        
 
     if ( id ) {
-        const movies = useSelector(state => state.movies.items);
         data = movies[id];
-    }
-
-    const handleSubmit = (event) => {
-        
     }
 
     return (
         <Base>
             <div style={{height: '100vh', justifyContent: 'center', display: 'flex', flexDirection: 'column', rowGap: '3rem'}}>
                 <Header label={`Create a new movie`}/>
-                <Fields {...data} onSubmit={handleSubmit} />
+                <Fields id={id} {...data}/>
             </div>
             <Wave float={false}/>
         </Base>

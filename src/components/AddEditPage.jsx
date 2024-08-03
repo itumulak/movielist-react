@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import Base from "./Base";
 import Fields from "./Fields";
 import Header from "./Header";
-import Wave from "./Wave";
 
 export default () => {
     let data;
@@ -16,11 +15,8 @@ export default () => {
 
     return (
         <Base>
-            <div style={{height: '100vh', justifyContent: 'center', display: 'flex', flexDirection: 'column', rowGap: '3rem'}}>
-                <Header label={`Create a new movie`}/>
-                <Fields id={id} {...data}/>
-            </div>
-            <Wave float={false}/>
+            <Header label={!id ? `Create a new movie` : `Edit`}/>
+            <Fields id={id} {...data}/>
         </Base>
     );
 }

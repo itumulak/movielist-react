@@ -49,16 +49,17 @@ const getBase64 = async (file) => {
 }
 
 export default ({id = '', title = '', year = '', poster = '', ...props}) => {
-    const dispatch = useDispatch();
     const [fieldTitle, setTitle] = useState(title);
     const [fieldYear, setYear] = useState(year);
     const [file, setFile] = useState(poster);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const onDrop = useCallback((acceptedFiles) => {
         const image = getBase64(acceptedFiles[0]);
         image.then(value => setFile(() => value));
     }, []);
     const {getRootProps, getInputProps} = useDropzone({maxFiles: 1, onDrop});
-    const navigate = useNavigate();
     const navigateBack = () => navigate('/');
 
     const handleOnChangeTitle = (event) => {
@@ -75,6 +76,10 @@ export default ({id = '', title = '', year = '', poster = '', ...props}) => {
 
     const handleOnSubmit = (event) => {
         event.preventDefault();
+
+        if (!file) {
+            console.log('no file.');
+        }
         
         if ( id ) {            
             dispatch(edit({id, data: {title: fieldTitle, year: fieldYear, poster: file}}));
@@ -86,10 +91,14 @@ export default ({id = '', title = '', year = '', poster = '', ...props}) => {
         }
     }
 
+    const handleRequiredFields = () => {
+        
+    }
+
     return (
         <Form onSubmit={handleOnSubmit} {...props}>
-            <Input onChange={handleOnChangeTitle} placeholder="Title" value={title} />
-            <Input type="number" onChange={handleOnChangeYear} placeholder="Publishing year" value={year}/>
+            <Input required onChange={handleOnChangeTitle} placeholder="Title" value={title} />
+            <Input required type="number" onChange={handleOnChangeYear} placeholder="Publishing year" value={year}/>
             <DropZone {...getRootProps()}>
                 <input {...getInputProps()} />
                 {!file && <div><p><FileDownloadIcon/></p><p>Upload an image</p></div> }

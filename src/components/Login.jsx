@@ -1,5 +1,7 @@
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../store/authSlice";
 import Base from './Base';
 import Input from "./Input";
 import Checkbox from "./Checkbox";
@@ -16,8 +18,11 @@ const Login = styled.div`
 
 export default () => {
     const navigate = useNavigate();
-
-    const navigateMovieList = () => {
+    const dispatch = useDispatch();
+    
+    const navigateMovieList = (event) => {
+        event.preventDefault();
+        dispatch(login())
         navigate('/');
     }
 

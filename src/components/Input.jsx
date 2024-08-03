@@ -9,6 +9,12 @@ const StyledInput = styled.input`
     &::placeholder {
         color: white;
     }
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 `
 
 export default ({type = 'text', placeholder = '', value = '', onChange}) => {

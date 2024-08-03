@@ -38,6 +38,11 @@ const DropZone = styled.div`
     }
 `
 
+const DropZoneRequiredText = styled.p`
+    color: #EB5757;
+    display: none;
+`
+
 const getBase64 = async (file) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -52,6 +57,7 @@ export default ({id = '', title = '', year = '', poster = '', ...props}) => {
     const [fieldTitle, setTitle] = useState(title);
     const [fieldYear, setYear] = useState(year);
     const [file, setFile] = useState(poster);
+    const [submitDenied, setSubmitDenied] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -78,21 +84,17 @@ export default ({id = '', title = '', year = '', poster = '', ...props}) => {
         event.preventDefault();
 
         if (!file) {
-            console.log('no file.');
+            setSubmitDenied(true);
+        } else {
+            if ( id ) {            
+                dispatch(edit({id, data: {title: fieldTitle, year: fieldYear, poster: file}}));
+                navigateBack();
+            }
+            else {
+                dispatch(add({title: fieldTitle, year: fieldYear, poster: file}));
+                navigateBack();
+            }
         }
-        
-        if ( id ) {            
-            dispatch(edit({id, data: {title: fieldTitle, year: fieldYear, poster: file}}));
-            navigateBack();
-        }
-        else {
-            dispatch(add({title: fieldTitle, year: fieldYear, poster: file}));
-            navigateBack();
-        }
-    }
-
-    const handleRequiredFields = () => {
-        
     }
 
     return (
@@ -101,8 +103,9 @@ export default ({id = '', title = '', year = '', poster = '', ...props}) => {
             <Input required type="number" onChange={handleOnChangeYear} placeholder="Publishing year" value={year}/>
             <DropZone {...getRootProps()}>
                 <input {...getInputProps()} />
-                {!file && <div><p><FileDownloadIcon/></p><p>Upload an image</p></div> }
+                {!file && <div><p><FileDownloadIcon/></p><p>Upload an image.</p></div> }
                 {file && <img src={file}/>}
+                {submitDenied && <p className="text-base" style={{color: '#EB5757'}}>An image is required.</p>}
             </DropZone>
             <Buttons>
                 <Button onClick={navigateBack} label={`Cancel`}/>

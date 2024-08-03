@@ -6,7 +6,7 @@ import { add, edit } from "../store/movieSlice";
 import { styled } from "styled-components";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import Button from "./Button";
-import Form from "./Form";
+import Form from "./PageForm";
 import Input from "./Input";
 
 const Buttons = styled.div`
@@ -36,11 +36,11 @@ const DropZone = styled.div`
         width: 24px;
         height: 24px;
     }
-`
 
-const DropZoneRequiredText = styled.p`
-    color: #EB5757;
-    display: none;
+    @media screen and (min-width: 768px) {
+        max-height: unset;
+        height: auto;
+    }
 `
 
 const getBase64 = async (file) => {
@@ -99,18 +99,18 @@ export default ({id = '', title = '', year = '', poster = '', ...props}) => {
 
     return (
         <Form onSubmit={handleOnSubmit} {...props}>
-            <Input required onChange={handleOnChangeTitle} placeholder="Title" value={title} />
-            <Input required type="number" onChange={handleOnChangeYear} placeholder="Publishing year" value={year}/>
-            <DropZone {...getRootProps()}>
+            <Input className="title-area" required onChange={handleOnChangeTitle} placeholder="Title" value={title} />
+            <Input className="year-area" required type="number" onChange={handleOnChangeYear} placeholder="Publishing year" value={year}/>
+            <Buttons className="actions-area">
+                <Button onClick={navigateBack} label={`Cancel`}/>
+                <Button isPrimary={true} label={`Submit`}/>
+            </Buttons>
+            <DropZone className="image-area" {...getRootProps()}>
                 <input {...getInputProps()} />
                 {!file && <div><p><FileDownloadIcon/></p><p>Upload an image.</p></div> }
                 {file && <img src={file}/>}
                 {submitDenied && <p className="text-base" style={{color: '#EB5757'}}>An image is required.</p>}
             </DropZone>
-            <Buttons>
-                <Button onClick={navigateBack} label={`Cancel`}/>
-                <Button isPrimary={true} label={`Submit`}/>
-            </Buttons>
         </Form>
     );
 }

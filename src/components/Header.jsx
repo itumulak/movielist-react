@@ -7,6 +7,11 @@ const Header = styled.div`
     max-width: 380px;
     width: 100%;
     padding-top: 4rem;
+
+    @media screen and (min-width: 768px) {
+        max-width: unset;
+        padding-top: 0;
+    }
 `
 
 const Title = styled.div`
@@ -27,6 +32,12 @@ const Logout = styled.button`
     svg {
         font-size: 24px;
     }
+
+    @media screen and (min-width: 768px) {
+        #logout-label {
+            display: block;
+        }
+    }
 `
 
 export default ({label, showAdd = false, showLogout = false, ...props}) => {
@@ -46,7 +57,7 @@ export default ({label, showAdd = false, showLogout = false, ...props}) => {
                 <div>{label}</div>
                 {showAdd && <button onClick={navigateAdd}><AddCircleOutlineIcon/></button>}
             </Title>
-            {showLogout && <Logout><button onClick={navigateLogin}><span id="logout-label">Logout</span> <LogoutIcon/></button></Logout>}
+            {showLogout && <Logout className="flex flex-row items-center gap-x-4" onClick={navigateLogin}><span id="logout-label">Logout</span> <LogoutIcon/></Logout>}
         </Header>
     );
 }

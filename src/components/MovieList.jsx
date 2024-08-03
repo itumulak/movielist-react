@@ -9,6 +9,11 @@ const List = styled.div`
     width: 100%;
     gap: 2rem;
     z-index: 999;
+
+    @media screen and (min-width: 768px) {
+        max-width: unset;
+        grid-template-columns: repeat(4, 1fr);
+    }
 `
 
 export default ({list, showAdd = false, showLogout = false, ...props}) => {
